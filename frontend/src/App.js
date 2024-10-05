@@ -4,19 +4,20 @@ import LandingPage from './HomePage/LandingPage';
 import StudentHome from './Student/StudentHome';
 import MentorHome from './Mentor/MentorHome';
 import AdminHome from './Admin/AdminHome';
-import LeaderBoardPage from './LeaderboardPage/LeaderboardPage';
-import SubmissionPage from './SubmissionPage/SubmissionPage';
+
+// import LeaderBoardPage from './LeaderboardPage/LeaderboardPage';
+// import SubmissionPage from './SubmissionPage/SubmissionPage';
 
 import StudentDashboard from './Student/Pages/StudentDashboard';
 import ProjectDetails from './Student/Pages/ProjectDetails';
 import ChallengeDetails from './Student/Pages/ChallengeDetails';
 import StudentProfileSettings from './Student/Pages/StudentProfileSettings';
 import LearningPath from './Student/Pages/LearningPath';
-import MentorRequestForm from './Student/Pages/MentorRequestForm';
 
 import MentorDashboard from './Mentor/Pages/MentorDashboard';
 import ProjectDetailMentor from './Mentor/Pages/ProjectDetailMentor';
 import ChallengeDetailMentor from './Mentor/Pages/ChallengeDetailMentor';
+import MentorFeedback from './Mentor/Pages/MentorFeedback';
 import MentorProfileSettings from './Mentor/Pages/MentorProfileSettings';
 
 import AdminDashboard from './Admin/Pages/AdminDashboard';
@@ -24,9 +25,14 @@ import ManageUsers from './Admin/Pages/ManageUsers';
 import ManageChallenges from './Admin/Pages/ManageChallenges';
 import ReportsAnalytics from './Admin/Pages/ReportAnalytics';
 import Leaderboard from './Admin/Pages/Leaderboard'
+import AdminProfile from './Admin/Pages/AdminProfile';
 
 import LoginPage from './Auth/LoginPage';
 import RegistrationPage from './Auth/RegistrationPage';
+
+import axios from 'axios';
+
+axios.defaults.withCredentials = true;
 
 const App = () => {
   return (
@@ -45,7 +51,6 @@ const App = () => {
           <Route path="project-details" element={<ProjectDetails />} /> {/* Removed project prop */}
           <Route path="challenge-details" element={<ChallengeDetails />} /> {/* Removed challenges prop */}
           <Route path="learning-path" element={<LearningPath/>} />
-          <Route path="mentor-request-form" element={<MentorRequestForm/>} />
           <Route path="student-profile-settings" element={<StudentProfileSettings />} />
         </Route>
 
@@ -56,16 +61,18 @@ const App = () => {
           <Route path="mentor-dashboard" element={<MentorDashboard />} />
           <Route path="projects" element={<ProjectDetailMentor />} /> {/* Removed project prop */}
           <Route path="challenges" element={<ChallengeDetailMentor />} /> {/* Removed project prop */}
+          <Route path="mentor-feedback" element={<MentorFeedback/>} />
           <Route path="mentor-profile-settings" element={<MentorProfileSettings />} />
         </Route>
 
-        <Route path="/admin-home" element={<AdminHome />}>
+        <Route path="/company-home" element={<AdminHome />}>
           <Route index element={<AdminDashboard />} />
           <Route path="admin-dashboard" element={<AdminDashboard />} />
           <Route path="manage-users" element={<ManageUsers />} />
           <Route path="manage-challenges" element={<ManageChallenges />} />
           <Route path="reports-analytics" element={<ReportsAnalytics />} />
           <Route path="leaderboard" element={<Leaderboard />} />
+          <Route path="admin-profile" element={<AdminProfile />} />
         </Route>
 
 

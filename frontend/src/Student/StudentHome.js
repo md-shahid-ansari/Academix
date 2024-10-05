@@ -9,7 +9,7 @@ const StudentHome = () => {
   return (
     <div className="student-home">
       <header className="student-home-header">
-        <h1>Bridging Gap</h1>
+        <h1>ACADEMIX</h1>
         <div className="profile">
           <Link to="student-profile-settings" className="profile-link">Student Profile</Link>
         </div>

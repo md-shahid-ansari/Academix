@@ -1,5 +1,6 @@
 import React from 'react';
-import Navbar from './Navbar'; // Adjust the path if necessary
+import Navbar from './Components/Navbar'; // Adjust the path if necessary
+
 import './LandingPage.css';
 
 const LandingPage = () => {
@@ -11,6 +12,7 @@ const LandingPage = () => {
                 <p>Your journey to knowledge starts here. Explore projects, challenges, and learning paths.</p>
                 <a href="/login-page" className="get-started-btn">Get Started</a>
             </header>
+
             <section className="features">
                 <h2>Features</h2>
                 <div className="feature-list">

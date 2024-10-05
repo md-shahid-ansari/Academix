@@ -11,7 +11,6 @@ const StudentSidebar = () => {
           <li><Link to="project-details">Project Details</Link></li>
           <li><Link to="challenge-details">Challenge Details</Link></li>
           <li><Link to="learning-path">Learning Path</Link></li>
-          <li><Link to="mentor-request-form">Request Mentor Support</Link></li>
         </ul>
       </nav>
     </div>
