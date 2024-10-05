@@ -1,0 +1,41 @@
+/* AdminHome.css */
+
+.admin-home {
+    display: flex;
+    height: 100vh;
+}
+
+.admin-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+
+/* AdminSidebar.css */
+
+.admin-sidebar {
+    width: 250px;
+    background-color: #2c3e50;
+    color: white;
+    padding: 20px;
+}
+
+.admin-sidebar nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.admin-sidebar nav ul li {
+    margin: 15px 0;
+}
+
+.admin-sidebar nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.admin-sidebar nav ul li a:hover {
+    text-decoration: underline;
+}

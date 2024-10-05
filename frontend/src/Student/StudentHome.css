@@ -1,0 +1,64 @@
+.student-home {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .student-home-header {
+    background-color: #f8f9fa;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  .profile-link {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .profile-link:hover {
+    text-decoration: underline;
+  }
+  
+  .main-content {
+    display: flex;
+    flex: 1;
+  }
+  
+  .content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f1f1f1;
+  }
+
+  .student-sidebar {
+    width: 250px;
+    background-color: #343a40;
+    color: white;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .student-sidebar nav ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .student-sidebar nav ul li {
+    margin: 15px 0;
+  }
+  
+  .student-sidebar nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+  }
+  
+  .student-sidebar nav ul li a:hover {
+    text-decoration: underline;
+  }
+  

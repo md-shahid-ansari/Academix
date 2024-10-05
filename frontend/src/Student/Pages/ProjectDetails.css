@@ -1,0 +1,62 @@
+.project-detail {
+    padding: 20px;
+}
+
+.project-header {
+    background-color: #f5f5f5;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.mentor-info, .github-section, .team-members, .tasks, .mentor-support {
+    margin-bottom: 40px;
+}
+
+.mentor-details {
+    display: flex;
+    align-items: center;
+}
+
+.mentor-details img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.github-section input {
+    padding: 10px;
+    width: 80%;
+    margin-right: 10px;
+}
+
+.github-section button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.team-members ul, .tasks ul {
+    list-style: none;
+    padding: 0;
+}
+
+.task-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.task-item select {
+    padding: 5px;
+}
+
+.request-help-btn {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
