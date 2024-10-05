@@ -26,12 +26,6 @@ const projectSchema = new mongoose.Schema({
     },
     githubRepoURL: {
         type: String,  // URL for the project's GitHub repository
-        validate: {
-            validator: function(v) {
-                return /^(ftp|http|https):\/\/[^ "]+$/.test(v); // Simple URL validation
-            },
-            message: props => `${props.value} is not a valid URL!`
-        }
     },
     status: {
         type: String,

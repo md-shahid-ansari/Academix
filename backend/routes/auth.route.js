@@ -28,6 +28,16 @@ import { verifyCompany } from "../midlayer/verifyCompany.js";
 import { verifyStudent } from "../midlayer/verifyStudent.js";
 import { verifyMentor } from "../midlayer/verifyMentor.js";
 
+import { 
+    createProject,
+    fetchProjects,
+    
+    createChallenge,
+    fetchChallenges,
+    deleteChallenge,
+    updateChallenge,
+ } from "../controllers/company.controller.js";
+
 
 const router = express.Router();
 
@@ -58,5 +68,15 @@ router.post("/company-reset/:token", companyReset);
 router.post("/company-logout", companyLogout);
 router.get("/company-auth", verifyCompany, authCompany);
 
+
+
+router.post("/create-project", createProject);
+router.post("/fetch-projects", fetchProjects);
+
+
+router.post('/fetch-challenges', fetchChallenges);
+router.post('/create-challenge', createChallenge);
+router.put('/update-challenge/:id', updateChallenge);
+router.delete('/delete-challenge/:id', deleteChallenge);
 
 export default router;

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './ManageProjects.css';
 import { IsCompanySessionLive } from '../utils/IsCompanySessionLive';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+const URL = process.env.REACT_APP_BACKEND_URL; // Replace with your actual backend URL
 
 const ManageProjects = () => {
     const navigate = useNavigate();
@@ -15,7 +18,7 @@ const ManageProjects = () => {
     const [assignedStudents, setAssignedStudents] = useState([]);
     const [assignedMentor, setAssignedMentor] = useState('');
     const [githubRepoURL, setGithubRepoURL] = useState('');
-    const [taskList, setTaskList] = useState([{ title: '', status: 'not started' }]); // Initial task
+    const [taskList, setTaskList] = useState([{ title: '', description: '', status: 'not started' }]); // Initial task with description
 
     useEffect(() => {
         let isMounted = true;
@@ -31,15 +34,24 @@ const ManageProjects = () => {
                 return;
             }
             setCompanyData(companyData);
-            // Load existing projects (You might want to fetch this from your API)
-            setProjects([]); // Replace with fetched data
+            
+            try {
+                // Load existing projects (You might want to fetch this from your API)
+                const response = await axios.post(`${URL}/api/auth/fetch-projects`);
+                if(response.status === 200){
+                    setProjects(response.data.data);
+                }
+                
+            } catch (error) {
+                setError('Failed to load projects.', error);
+            }
             setLoading(false);
         }
         authenticate();
     }, [navigate]);
 
     const handleAddTask = () => {
-        setTaskList([...taskList, { title: '', status: 'not started' }]);
+        setTaskList([...taskList, { title: '', description: '', status: 'not started' }]);
     };
 
     const handleTaskChange = (index, field, value) => {
@@ -48,49 +60,51 @@ const ManageProjects = () => {
         setTaskList(newTasks);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Submit project data to the server here
-        if (editProjectId) {
-            // Update project logic
-            const updatedProjects = projects.map(project => 
-                project.id === editProjectId 
-                ? { id: editProjectId, title: projectTitle, description: projectDescription, assignedStudents, assignedMentor, githubRepoURL, taskList }
-                : project
-            );
-            setProjects(updatedProjects);
-        } else {
-            // Add new project logic
+
+        try {
+
+            // Step 2: Create the project with the task IDs
             const newProject = {
-                id: projects.length + 1, // Or use a more appropriate ID generation logic
-                title: projectTitle,
-                description: projectDescription,
+                projectTitle,
+                projectDescription,
                 assignedStudents,
                 assignedMentor,
                 githubRepoURL,
-                taskList
+                taskList, // Use task IDs instead of the full task list
             };
-            setProjects([...projects, newProject]);
-        }
 
-        // Reset form
-        setEditProjectId(null);
-        setProjectTitle('');
-        setProjectDescription('');
-        setAssignedStudents([]);
-        setAssignedMentor('');
-        setGithubRepoURL('');
-        setTaskList([{ title: '', status: 'not started' }]); // Reset tasks
+            await axios.post(`${URL}/api/auth/create-project`, newProject);
+
+
+            // Step 4: Reset the form
+            setEditProjectId(null);
+            setProjectTitle('');
+            setProjectDescription('');
+            setAssignedStudents([]);
+            setAssignedMentor('');
+            setGithubRepoURL('');
+            setTaskList([{ title: '', description: '', status: 'not started' }]); // Reset tasks
+
+        } catch (error) {
+            console.error('Error creating project or tasks:', error);
+            setError('Failed to create project. Please try again.');
+        }
     };
 
     const handleEdit = (project) => {
-        setEditProjectId(project.id);
-        setProjectTitle(project.title);
-        setProjectDescription(project.description);
+        setEditProjectId(project.projectId);
+        setProjectTitle(project.projectTitle);
+        setProjectDescription(project.projectDescription);
         setAssignedStudents(project.assignedStudents);
         setAssignedMentor(project.assignedMentor);
         setGithubRepoURL(project.githubRepoURL);
-        setTaskList(project.taskList);
+        setTaskList(project.taskList.map(task => ({
+            title: task.taskTitle,
+            description: task.taskDescription || '', // Add description for each task
+            status: task.status,
+        })));
     };
 
     const handleDelete = (id) => {
@@ -156,6 +170,15 @@ const ManageProjects = () => {
                             />
                         </div>
                         <div className="form-group">
+                            <label>Task Description</label>
+                            <textarea
+                                placeholder="Task Description"
+                                value={task.description}
+                                onChange={(e) => handleTaskChange(index, 'description', e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
                             <label>Status</label>
                             <select
                                 value={task.status}
@@ -184,13 +207,13 @@ const ManageProjects = () => {
                     </thead>
                     <tbody>
                         {projects.map((project) => (
-                            <tr key={project.id}>
-                                <td>{project.title}</td>
-                                <td>{project.description}</td>
+                            <tr key={project.projectId}>
+                                <td>{project.projectTitle}</td>
+                                <td>{project.projectDescription}</td>
                                 <td>{project.taskList.length ? project.taskList.map(task => task.status).join(', ') : 'No tasks'}</td>
                                 <td>
                                     <button className="edit-btn" onClick={() => handleEdit(project)}>Edit</button>
-                                    <button className="delete-btn" onClick={() => handleDelete(project.id)}>Delete</button>
+                                    <button className="delete-btn" onClick={() => handleDelete(project.projectId)}>Delete</button>
                                 </td>
                             </tr>
                         ))}

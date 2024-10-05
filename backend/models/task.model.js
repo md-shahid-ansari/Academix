@@ -18,7 +18,6 @@ const taskSchema = new mongoose.Schema({
     },
     assignedTo: {
         type: Number,  // The student responsible for the task
-        required: true
     },
     status: {
         type: String,
@@ -27,7 +26,7 @@ const taskSchema = new mongoose.Schema({
     },
     dueDate: {
         type: Date,
-        required: true  // The deadline for completing the task
+        
     },
     files: {
         type: String,  // URL or link to task-related documentation (preferably GitHub)
