@@ -25,25 +25,23 @@ const projectSchema = new mongoose.Schema({
         required: true
     },
     githubRepoURL: {
-        type: String,
-        required: true  // URL for the project's GitHub repository
+        type: String,  // URL for the project's GitHub repository
+        validate: {
+            validator: function(v) {
+                return /^(ftp|http|https):\/\/[^ "]+$/.test(v); // Simple URL validation
+            },
+            message: props => `${props.value} is not a valid URL!`
+        }
     },
     status: {
         type: String,
         enum: ['in progress', 'completed'],
         default: 'in progress'
     },
-    taskList: {
-        type: [{  // List of tasks with their status
-            taskTitle: String,
-            status: {
-                type: String,
-                enum: ['not started', 'in progress', 'completed'],
-                default: 'not started'
-            }
-        }],
-        default: []
-    },
+    taskList: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Task'  // Reference to Task model
+    }],
     teamCommunication: {
         type: String,
         default: null  // Real-time chat or discussion board link

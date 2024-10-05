@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './StudentDashboard.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { IsStudentSessionLive } from '../utils/IsStudentSessionLive';
 
 // Custom hook to simulate fetching student dashboard data
 const useFetchStudentDashboard = () => {
+
     const [data, setData] = useState({
         studentName: '',
         projects: [],
@@ -16,6 +18,7 @@ const useFetchStudentDashboard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                
                 // Simulate an API call with a delay
                 await new Promise((resolve) => setTimeout(resolve, 1000));
                 
@@ -50,7 +53,31 @@ const useFetchStudentDashboard = () => {
 };
 
 const StudentDashboard = () => {
-    const { data, loading, error } = useFetchStudentDashboard();
+    const { data } = useFetchStudentDashboard();
+    const navigate = useNavigate();
+    const [studentData , setStudentData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        let isMounted = true;
+        const authenticate = async () => {
+        const { isAuthenticated, studentData } = await IsStudentSessionLive();
+
+        if (!isMounted) return;
+
+        if (!isAuthenticated) {
+            setError('You are not authenticated. Please log in again.');
+            navigate('/student-login');
+            setLoading(false);
+            return;
+        }
+        setStudentData(studentData);
+        }
+        authenticate();
+        setLoading(false);
+    }, [navigate]);
+
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
@@ -127,13 +154,4 @@ const StudentDashboard = () => {
     );
 };
 
-// Example Usage
-const App = () => {
-    return (
-        <div className="app">
-            <StudentDashboard />
-        </div>
-    );
-};
-
-export default App;
+export default StudentDashboard;
