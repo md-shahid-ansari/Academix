@@ -30,7 +30,7 @@ export const updateTaskStatus = async (req, res) => {
 
 
 export const requestMentorHelp = async (req, res) => {
-    const { studentId, mentorId, projectId, requestDetails, challengeId } = req.body;
+    let { studentId, mentorId, projectId, requestDetails, challengeId } = req.body;
     console.log(studentId, mentorId, projectId, requestDetails, challengeId)
     if (!studentId || !mentorId || !requestDetails) {
         return res.status(400).json({ message: 'All fields are required.' });
