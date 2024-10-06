@@ -1,93 +1,113 @@
-import React, { useState } from 'react';
-import './ChallengeDetails.css'; // Add your custom styles
+import React, { useState, useEffect } from 'react';
+import './ChallengeDetails.css'; // Add styling here
+import axios from 'axios';
+import { IsStudentSessionLive } from '../utils/IsStudentSessionLive';
+import { useNavigate } from 'react-router-dom';
+
+const URL = process.env.REACT_APP_BACKEND_URL; // Replace with your actual backend URL
 
 const ChallengeDetails = () => {
-    const [githubLink, setGithubLink] = useState('');
+    const navigate = useNavigate();
+    const [studentData, setStudentData] = useState([]);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [challenges, setChallenges] = useState([]);
+    const [issueExplanation, setIssueExplanation] = useState(''); // State for issue explanation
+    const [submissionLink, setSubmissionLink] = useState(''); // State for submission link
 
-    // Example challenges data (can be fetched from API in a real scenario)
-    const [challenges] = useState([
-        {
-            id: 1,
-            title: "AI Crop Yield Prediction",
-            company: {
-                name: "AgroTech Solutions",
-                logo: "https://via.placeholder.com/100"
-            },
-            skillsRequired: ["Python", "Machine Learning", "Data Analysis"],
-            description: "Develop an AI model to predict crop yields based on historical weather and soil data.",
-            deadline: "2024-11-30"
-        },
-        {
-            id: 2,
-            title: "Weather Forecasting Model",
-            company: {
-                name: "ClimateCorp",
-                logo: "https://via.placeholder.com/100"
-            },
-            skillsRequired: ["R", "Data Science", "Forecasting"],
-            description: "Build a weather forecasting model using past data to predict rainfall and temperature.",
-            deadline: "2024-12-15"
-        },
-        {
-            id: 3,
-            title: "Smart Irrigation System",
-            company: {
-                name: "IrrigateNow",
-                logo: "https://via.placeholder.com/100"
-            },
-            skillsRequired: ["IoT", "C++", "Embedded Systems"],
-            description: "Create an IoT-based irrigation system that optimizes water usage based on real-time soil moisture data.",
-            deadline: "2024-12-01"
+    // Fetch challenges from API
+    useEffect(() => {
+        const fetchChallenges = async () => {
+            const { isAuthenticated, studentData } = await IsStudentSessionLive();
+
+            if (!isAuthenticated) {
+                setError('You are not authenticated. Please log in again.');
+                navigate('/student-login');
+                setLoading(false);
+                return;
+            }
+            setStudentData(studentData);
+
+            try {
+                const response = await axios.post(`${URL}/api/auth/fetch-challenges`);
+                setChallenges(response.data);
+            } catch (error) {
+                console.error('Error fetching challenges:', error);
+                setError('Failed to fetch challenges. Please try again later.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchChallenges();
+    }, [navigate]);
+
+    // Handle submission
+    const handleSubmission = async (challengeId) => {
+        if (!submissionLink) {
+            alert('Please provide a submission link.');
+            return;
         }
-    ]);
 
-    const handleGithubSubmit = (challengeId) => {
-        // Logic to handle GitHub URL submission for the specific challenge
-        console.log(`GitHub Repo Submitted for Challenge ${challengeId}: `, githubLink);
+        try {
+            await axios.post(`${URL}/api/auth/submit-challenge`, {
+                studentId: studentData.studentId,
+                challengeId,
+                gitHubRepoURL: submissionLink,
+            });
+            alert(`Submission successful for challenge (ID: ${challengeId})`);
+            setSubmissionLink(''); // Reset the input after submission
+        } catch (error) {
+            console.error('Error submitting challenge:', error);
+            alert('Failed to submit challenge. Please try again.');
+        }
     };
 
+    if (loading) {
+        return <div>Loading challenges...</div>;
+    }
+
+    if (error) {
+        return <div className="error-message">{error}</div>;
+    }
+
     return (
-        <div className="challenge-details">
-            <h1>Challenges</h1>
-            {challenges.map(challenge => (
-                <div key={challenge.id} className="challenge-detail">
+        <div className="challenge-list">
+            {challenges.map((challenge) => (
+                <div key={challenge.challengeId} className="challenge-detail">
                     <header className="challenge-header">
-                        <h2>{challenge.title}</h2>
-                        <div className="company-info">
-                            <img src={challenge.company.logo} alt={`${challenge.company.name} logo`} />
-                            <p>{challenge.company.name}</p>
-                        </div>
+                        <h1>{challenge.title}</h1>
+                        <p>{challenge.description}</p>
                     </header>
 
-                    <section className="skills-required">
-                        <h3>Skills Required</h3>
-                        <ul>
-                            {challenge.skillsRequired.map((skill, index) => (
-                                <li key={index}>{skill}</li>
-                            ))}
-                        </ul>
-                    </section>
-
-                    <section className="challenge-description">
-                        <h3>Description</h3>
-                        <p>{challenge.description}</p>
-                    </section>
-
-                    <section className="deadline">
-                        <h3>Deadline</h3>
-                        <p>{challenge.deadline}</p>
-                    </section>
-
-                    <section className="github-section">
-                        <h3>Submit GitHub Repository URL</h3>
-                        <input 
-                            type="url" 
-                            placeholder="Enter your GitHub repo link for this challenge" 
-                            value={githubLink} 
-                            onChange={(e) => setGithubLink(e.target.value)} 
+                    <section className="mentor-details">
+                        <h2>Mentor ID</h2>
+                        <p><strong>Mentor ID:</strong> {challenge.mentorId}</p>
+                        <textarea
+                            placeholder="Explain your issue or guidance needed"
+                            value={issueExplanation}
+                            onChange={(e) => setIssueExplanation(e.target.value)} // Handle explanation input
+                            rows={4}
+                            style={{ width: '100%', marginBottom: '10px' }}
+                            disabled // Disable mentor request field
                         />
-                        <button onClick={() => handleGithubSubmit(challenge.id)}>
-                            Submit GitHub Link
+                        <button className="help-button" disabled>
+                            Request Help
+                        </button>
+                        <p className="note">Note: This feature will be available in the future if mentor assigned.</p> {/* Note added here */}
+                    </section>
+
+                    <section className="submission-details">
+                        <h2>Submit Your Work</h2>
+                        <input
+                            type="text"
+                            placeholder="Enter your GitHub repo link"
+                            value={submissionLink}
+                            onChange={(e) => setSubmissionLink(e.target.value)} // Handle submission link input
+                            style={{ width: '100%', marginBottom: '10px' }}
+                        />
+                        <button className="submit-button" onClick={() => handleSubmission(challenge.challengeId)}>
+                            Submit
                         </button>
                     </section>
                 </div>

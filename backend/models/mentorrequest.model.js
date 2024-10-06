@@ -18,7 +18,9 @@ const mentorRequestSchema = new mongoose.Schema({
     },
     projectId: {
         type: Number,
-        required: true  // The project the student is working on
+    },
+    challengeId: {
+        type: Number,
     },
     requestStatus: {
         type: String,

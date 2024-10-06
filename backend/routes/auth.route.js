@@ -38,6 +38,13 @@ import {
     updateChallenge,
  } from "../controllers/company.controller.js";
 
+ import {
+    submitTaskRepo,
+    requestMentorHelp,
+    updateTaskStatus,
+    submitChallenge
+ } from "../controllers/student.controller.js";
+
 
 const router = express.Router();
 
@@ -78,5 +85,10 @@ router.post('/fetch-challenges', fetchChallenges);
 router.post('/create-challenge', createChallenge);
 router.put('/update-challenge/:id', updateChallenge);
 router.delete('/delete-challenge/:id', deleteChallenge);
+
+router.post('/submit-task-repo', submitTaskRepo);
+router.post('/request-mentor-help', requestMentorHelp);
+router.post('/update-task-status', updateTaskStatus);
+router.post('/submit-challenge', submitChallenge);
 
 export default router;

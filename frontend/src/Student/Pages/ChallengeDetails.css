@@ -39,3 +39,9 @@
     border: none;
     cursor: pointer;
 }
+
+.note {
+    color: #888; /* Gray color for the note */
+    font-size: 0.9em; /* Slightly smaller font size */
+    margin-top: 10px; /* Space above the note */
+}

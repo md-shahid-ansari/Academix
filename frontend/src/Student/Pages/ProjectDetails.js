@@ -8,15 +8,17 @@ const URL = process.env.REACT_APP_BACKEND_URL; // Replace with your actual backe
 
 const ProjectDetails = () => {
     const navigate = useNavigate();
+    const [studentData, setStudentData] = useState([])
     const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true); // Start with loading true
-    const [projects, setProjects] = useState([]); // State to hold projects
-    const [githubLinks, setGithubLinks] = useState({}); // State to hold GitHub links
+    const [loading, setLoading] = useState(true);
+    const [projects, setProjects] = useState([]);
+    const [githubLinks, setGithubLinks] = useState({});
+    const [issueExplanation, setIssueExplanation] = useState(''); // State for issue explanation
 
     // Fetch projects from API
     useEffect(() => {
         const fetchProjects = async () => {
-            const { isAuthenticated } = await IsStudentSessionLive();
+            const { isAuthenticated , studentData} = await IsStudentSessionLive();
 
             if (!isAuthenticated) {
                 setError('You are not authenticated. Please log in again.');
@@ -24,30 +26,36 @@ const ProjectDetails = () => {
                 setLoading(false);
                 return;
             }
+            setStudentData(studentData);
 
             try {
-                const response = await axios.post(`${URL}/api/auth/fetch-projects`); // Adjust the endpoint
-                setProjects(response.data);
+                const response = await axios.post(`${URL}/api/auth/fetch-projects`);
+                setProjects(response.data.data);
             } catch (error) {
                 console.error('Error fetching projects:', error);
                 setError('Failed to fetch projects. Please try again later.');
             } finally {
-                setLoading(false); // Set loading to false after fetching
+                setLoading(false);
             }
         };
 
         fetchProjects();
     }, [navigate]);
 
-    // Handle GitHub link submission
-    const handleGithubSubmit = async (projectId) => {
-        const githubLink = githubLinks[projectId] || ''; // Get the link from state
+    const handleGithubSubmit = async (task_id, taskId, projectId) => {
+        const githubLink = githubLinks[taskId] || '';
         if (!githubLink) {
             alert('Please enter a GitHub repository URL.');
             return;
         }
         try {
-            await axios.post(`${URL}/api/auth/submit-github/${projectId}`, { githubRepoURL: githubLink });
+            await axios.post(`${URL}/api/auth/submit-task-repo`, {
+                gitHubRepoURL: githubLink,
+                projectId,
+                taskId,
+                studentId: studentData.studentId,
+                task_Id : task_id
+            });
             alert('GitHub repository link submitted successfully!');
         } catch (error) {
             console.error('Error submitting GitHub link:', error);
@@ -55,27 +63,55 @@ const ProjectDetails = () => {
         }
     };
 
-    const handleGithubLinkChange = (projectId, link) => {
+    const handleGithubLinkChange = (taskId, link) => {
         setGithubLinks((prevLinks) => ({
             ...prevLinks,
-            [projectId]: link, // Update link for specific project
+            [taskId]: link,
         }));
     };
 
-    // New function to handle task status change
-    const handleTaskStatusChange = async (taskId, newStatus) => {
+    // Handle mentor help request
+    const handleHelpRequest = async (mentorId, projectId) => {
+        if (!issueExplanation) {
+            alert('Please provide an explanation for your request.');
+            return;
+        }
+
         try {
-            // Assuming you have an API endpoint to update the task status
-            await axios.post(`${URL}/api/auth/update-task-status`, { taskId, status: newStatus });
-            setProjects((prevProjects) =>
-                prevProjects.map((project) => ({
-                    ...project,
-                    tasks: project.tasks.map((task) =>
-                        task.id === taskId ? { ...task, status: newStatus } : task
-                    ),
-                }))
+            await axios.post(`${URL}/api/auth/request-mentor-help`, {
+                studentId: studentData.studentId /* your logic to get student ID */,
+                mentorId,
+                projectId,
+                requestDetails: issueExplanation, // Include issue explanation
+            });
+            alert(`Help request sent to mentor (ID: ${mentorId})`);
+            setIssueExplanation(''); // Reset the input after submission
+        } catch (error) {
+            console.error('Error sending help request:', error);
+            alert('Failed to send help request. Please try again.');
+        }
+    };
+
+    const handleStatusChange = async (taskId, newStatus) => {
+        try {
+            await axios.post(`${URL}/api/auth/update-task-status`, {
+                taskId,
+                status: newStatus,
+            });
+            alert(`Task status updated to: ${newStatus}`);
+            setProjects((prevProjects) => 
+                prevProjects.map((project) => {
+                    if (project.taskList.some((task) => task.taskId === taskId)) {
+                        return {
+                            ...project,
+                            taskList: project.taskList.map((task) =>
+                                task.taskId === taskId ? { ...task, status: newStatus } : task
+                            ),
+                        };
+                    }
+                    return project;
+                })
             );
-            alert('Task status updated successfully!');
         } catch (error) {
             console.error('Error updating task status:', error);
             alert('Failed to update task status. Please try again.');
@@ -83,74 +119,65 @@ const ProjectDetails = () => {
     };
 
     if (loading) {
-        return <div>Loading projects...</div>; // Show loading state
+        return <div>Loading projects...</div>;
     }
 
     if (error) {
-        return <div className="error-message">{error}</div>; // Show error message
+        return <div className="error-message">{error}</div>;
     }
 
     return (
         <div className="project-list">
             {projects.map((project) => (
-                <div key={project._id} className="project-detail">
+                <div key={project.projectId} className="project-detail">
                     <header className="project-header">
-                        <h1>{project.title}</h1>
-                        <p>{project.description}</p>
+                        <h1>{project.projectTitle}</h1>
+                        <p>{project.projectDescription}</p>
                     </header>
-
-                    <section className="mentor-info">
-                        <h2>Assigned Mentor</h2>
-                        <div className="mentor-details">
-                            <img src={project.mentor.profilePicture} alt={`${project.mentor.name}'s profile`} />
-                            <p>{project.mentor.name}</p>
-                        </div>
-                    </section>
-
-                    <section className="github-section">
-                        <h2>GitHub Repository URL</h2>
-                        <input
-                            type="url"
-                            placeholder="Enter your GitHub repo link"
-                            value={githubLinks[project._id] || ''} // Controlled input for GitHub link
-                            onChange={(e) => handleGithubLinkChange(project._id, e.target.value)} // Update state
-                        />
-                        <button onClick={() => handleGithubSubmit(project._id)}>Submit GitHub Link</button>
-                    </section>
-
-                    <section className="team-members">
-                        <h2>Team Members</h2>
-                        <ul>
-                            {project.teamMembers.map((member, index) => (
-                                <li key={index}>
-                                    {member.name}
-                                </li>
-                            ))}
-                        </ul>
-                    </section>
 
                     <section className="tasks">
                         <h2>Tasks</h2>
                         <ul>
-                            {project.tasks.map((task) => (
-                                <li key={task.id} className="task-item">
-                                    <h3>{task.title}</h3>
+                            {project.taskList.map((task) => (
+                                <li key={task.taskId} className="task-item">
+                                    <h3>{task.taskTitle}</h3>
                                     <p>Due Date: {task.dueDate}</p>
-                                    <select 
-                                        value={task.status} 
-                                        onChange={(e) => handleTaskStatusChange(task.id, e.target.value)}>
-                                        <option value="Not Started">Not Started</option>
-                                        <option value="In Progress">In Progress</option>
-                                        <option value="Completed">Completed</option>
+                                    <p>Status: {task.status}</p>
+                                    <input
+                                        type="url"
+                                        placeholder="Enter your GitHub repo link"
+                                        value={githubLinks[task.taskId] || ''}
+                                        onChange={(e) => handleGithubLinkChange(task.taskId, e.target.value)}
+                                    />
+                                    <button onClick={() => handleGithubSubmit(task._id, task.taskId, project.projectId)}>
+                                        Submit GitHub Link
+                                    </button>
+                                    <select
+                                        value={task.status}
+                                        onChange={(e) => handleStatusChange(task._id, e.target.value)}
+                                    >
+                                        <option value="not started">Not Started</option>
+                                        <option value="in progress">In Progress</option>
+                                        <option value="completed">Completed</option>
                                     </select>
                                 </li>
                             ))}
                         </ul>
                     </section>
 
-                    <section className="mentor-support">
-                        <h2>Need Mentor Support?</h2>
-                        <button className="request-help-btn">Request Help</button>
+                    <section className="mentor-details">
+                        <h2>Mentor ID</h2>
+                        <p><strong>Mentor ID:</strong> {project.assignedMentor}</p>
+                        <textarea
+                            placeholder="Explain your issue or guidance needed"
+                            value={issueExplanation}
+                            onChange={(e) => setIssueExplanation(e.target.value)} // Handle explanation input
+                            rows={4}
+                            style={{ width: '100%', marginBottom: '10px' }}
+                        />
+                        <button className="help-button" onClick={() => handleHelpRequest(project.assignedMentor, project.projectId)}>
+                            Request Help
+                        </button>
                     </section>
                 </div>
             ))}

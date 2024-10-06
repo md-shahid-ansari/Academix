@@ -20,6 +20,10 @@ const submissionSchema = new mongoose.Schema({
         type: Number,  // The related project ID (can be null if associated with a challenge)
         default: null
     },
+    taskId: {
+        type: Number,  // The related task ID (can be null if associated with a challenge)
+        default: null
+    },
     gitHubRepoURL: {
         type: String,
         required: true  // The GitHub repository link where the student’s code is hosted
