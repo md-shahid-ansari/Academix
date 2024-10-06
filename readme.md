@@ -45,3 +45,11 @@ While we have implemented key features to facilitate collaboration between compa
 
 💭 Key Ideas
 Our project emphasizes the importance of real-world experience in education, bridging the divide between academic learning and industry needs. By connecting students with industry professionals and providing a platform for practical engagement, we empower students to become job-ready and effectively contribute to their future workplaces.
+
+
+
+we late to make video^_^
+kindly, login and exprience our work!
+
+email for all role - sajarsadaf2000@gmail.com
+password for all role - 1234
