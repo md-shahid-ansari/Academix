@@ -1,65 +1,74 @@
-.landing-page {
-    text-align: center;
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
     font-family: Arial, sans-serif;
-}
-
-.landing-header {
+  }
+  
+  .navbar {
     background-color: #007bff;
     color: white;
-    padding: 50px 20px;
-}
-
-.landing-header h1 {
-    margin: 0;
-    font-size: 2.5em;
-}
-
-.landing-header p {
-    font-size: 1.2em;
-    margin: 20px 0;
-}
-
-.get-started-btn {
-    background-color: white;
-    color: #007bff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.features {
-    padding: 40px 20px;
-}
-
-.features h2 {
-    font-size: 2em;
-    margin-bottom: 20px;
-}
-
-.feature-list {
+    padding: 1rem;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+  }
+  
+  .navbar ul {
+    list-style-type: none;
+    display: flex;
+  }
+  
+  .navbar ul li {
+    margin-left: 20px;
+  }
+  
+  .navbar a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .hero-section {
+    text-align: center;
+    padding: 50px 20px;
+    background: #f8f9fa;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .team-section {
+    padding: 50px 20px;
+    text-align: center;
+  }
+  
+  .team-container {
+    display: flex;
+    justify-content: space-around;
     flex-wrap: wrap;
-}
-
-.feature-item {
-    width: 300px;
+  }
+  
+  .team-item {
     margin: 20px;
+  }
+  
+  .team-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+  }
+  
+  .footer {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.feature-item h3 {
-    font-size: 1.5em;
-}
-
-.landing-footer {
-    background-color: #f8f9fa;
-    padding: 20px 0;
-    font-size: 0.9em;
-    color: #666;
-}
+  }
+   */

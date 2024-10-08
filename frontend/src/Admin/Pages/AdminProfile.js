@@ -25,7 +25,7 @@ const AdminProfileSettings = () => {
 
     return (
         <div className="admin-profile-container">
-            <h1>Admin Profile Settings</h1>
+            <h1>Company Profile Settings</h1>
             <form className="profile-form" onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="name">Name:</label>

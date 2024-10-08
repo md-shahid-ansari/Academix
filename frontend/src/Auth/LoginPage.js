@@ -139,7 +139,7 @@ const LoginPage = () => {
           </button>
           {error && <div className="error-message">{error}</div>}
           <p>
-            <Link to={`/${formData.role.toLowerCase()}-register`}>
+            <Link to={`/register-page`}>
               Not registered? Click here to register!
             </Link>
           </p>

@@ -60,9 +60,9 @@ const MentorDashboard = () => {
 
     return (
         <div className="mentor-dashboard">
-            <header>
+            <nav>
                 <h1>Mentor Dashboard</h1>
-            </header>
+            </nav>
 
             {/* Projects You're Guiding */}
             <section className="guiding-projects">

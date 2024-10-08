@@ -75,10 +75,10 @@ const ChallengeDetails = () => {
         <div className="challenge-list">
             {challenges.map((challenge) => (
                 <div key={challenge.challengeId} className="challenge-detail">
-                    <header className="challenge-header">
+                    <nav className="challenge-header">
                         <h1>{challenge.title}</h1>
                         <p>{challenge.description}</p>
-                    </header>
+                    </nav>
 
                     <section className="mentor-details">
                         <h2>Mentor ID</h2>

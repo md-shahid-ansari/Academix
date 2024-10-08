@@ -13,6 +13,7 @@ const StudentSidebar = () => {
           <li><Link to="learning-path">Learning Path</Link></li>
         </ul>
       </nav>
+      <div className="logout-btn"><button>Logout</button></div>
     </div>
   );
 };

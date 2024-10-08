@@ -15,6 +15,7 @@ const AdminSidebar = () => {
                     <li><Link to="leaderboard">Leaderboard</Link></li>
                 </ul>
             </nav>
+            <div className="logout-btn"><button>Logout</button></div>
         </div>
     );
 };

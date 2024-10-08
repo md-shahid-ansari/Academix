@@ -77,10 +77,10 @@ const StudentDashboard = () => {
 
     return (
         <div className="student-dashboard">
-            <header className="student-dashboard-header">
+            <nav className="student-dashboard-header">
                 <h1>Welcome {studentData.studentName}</h1>
                 <p>Here are your ongoing projects, learning paths, and challenges.</p>
-            </header>
+            </nav>
 
             {/* Ongoing Projects */}
             <section className="ongoing-projects">

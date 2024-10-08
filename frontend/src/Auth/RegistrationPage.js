@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './RegistrationPage.css'; // Import the CSS file
-import {useNavigate } from 'react-router-dom';
+import {useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';  // Import axios
 
 const URL = process.env.REACT_APP_BACKEND_URL;
@@ -218,6 +218,11 @@ const RegistrationPage = () => {
             <button type="submit" className="submit-button" disabled={loading}>
               {loading ? "Registering..." : "Sign Up"}
             </button>
+            <p>
+              <Link to={`/login-page`}>
+                Already registered? Click here to login!
+              </Link>
+            </p>
           </form>
         ) : (
           <form onSubmit={handleOtpSubmit} className="verification-form">

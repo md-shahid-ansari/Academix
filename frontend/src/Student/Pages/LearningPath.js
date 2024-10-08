@@ -46,10 +46,10 @@ const LearningPath = () => {
 
     return (
         <div className="learning-path">
-            <header className="learning-path-header">
+            <nav className="learning-path-header">
                 <h1>{learningPath.pathTitle}</h1>
                 <p>{learningPath.description}</p>
-            </header>
+            </nav>
             
             {/* Modules Section */}
             <section className="modules-section">

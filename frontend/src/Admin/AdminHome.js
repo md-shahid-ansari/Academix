@@ -6,12 +6,12 @@ import './AdminHome.css';
 const AdminHome = () => {
     return (
         <div className="Admin-home">
-            <header className="admin-home-header">
+            <nav className="admin-home-header">
                 <h1>ACADEMIX</h1>
                 <div className="profile">
-                    <Link to="admin-profile" className="profile-link">Admin Profile</Link>
+                    <Link to="admin-profile" className="profile-link">Company Profile</Link>
                 </div>
-            </header>
+            </nav>
              <div className="admin-main-content">
                 <AdminSidebar />
                 <div className="content">

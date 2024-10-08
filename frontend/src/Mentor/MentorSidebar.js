@@ -11,9 +11,10 @@ const MentorSidebar = () => {
                     <li><Link to="projects">Project Details</Link></li>
                     <li><Link to="challenges">Challenges</Link></li>
                     <li><Link to="mentor-feedback">Feedback Section</Link></li>
-                    <li><Link to="mentor-profile-settings">Profile Settings</Link></li>
+                    <li><Link to="leaderboard">Leaderboard</Link></li>
                 </ul>
             </nav>
+            <div className="logout-btn"><button>Logout</button></div>
         </div>
     );
 };

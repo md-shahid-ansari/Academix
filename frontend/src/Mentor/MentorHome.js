@@ -6,12 +6,12 @@ import './MentorHome.css';
 const MentorHome = () => {
     return (
         <div className="mentor-home">
-            <header className="mentor-home-header">
+            <nav className="mentor-home-header">
                 <h1>ACADEMIX</h1>
                 <div className="profile">
                     <Link to="mentor-profile-settings" className="profile-link">Mentor Profile</Link>
                 </div>
-            </header>
+            </nav>
              <div className="mentor-main-content">
                 <MentorSidebar />
                 <div className="content">

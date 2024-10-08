@@ -130,10 +130,10 @@ const ProjectDetails = () => {
         <div className="project-list">
             {projects.map((project) => (
                 <div key={project.projectId} className="project-detail">
-                    <header className="project-header">
+                    <nav className="project-header">
                         <h1>{project.projectTitle}</h1>
                         <p>{project.projectDescription}</p>
-                    </header>
+                    </nav>
 
                     <section className="tasks">
                         <h2>Tasks</h2>
