@@ -10,6 +10,7 @@ const MentorSidebar = () => {
                     <li><Link to="mentor-dashboard">Dashboard</Link></li>
                     <li><Link to="projects">Project Details</Link></li>
                     <li><Link to="challenges">Challenges</Link></li>
+                    <li><Link to="mentor-learning">Learnings</Link></li>
                     <li><Link to="mentor-feedback">Feedback Section</Link></li>
                 </ul>
             </nav>

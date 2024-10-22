@@ -16,6 +16,7 @@ import ProjectDetailMentor from './Mentor/Pages/ProjectDetailMentor';
 import ChallengeDetailMentor from './Mentor/Pages/ChallengeDetailMentor';
 import MentorFeedback from './Mentor/Pages/MentorFeedback';
 import MentorProfileSettings from './Mentor/Pages/MentorProfileSettings';
+import MentorLearningPath from './Mentor/Pages/MentorLearningPath';
 
 import AdminDashboard from './Admin/Pages/AdminDashboard';
 import ManageUsers from './Admin/Pages/ManageUsers';
@@ -58,6 +59,7 @@ const App = () => {
           <Route path="mentor-dashboard" element={<MentorDashboard />} />
           <Route path="projects" element={<ProjectDetailMentor />} /> 
           <Route path="challenges" element={<ChallengeDetailMentor />} /> 
+          <Route path="mentor-learning" element={<MentorLearningPath />} />
           <Route path="mentor-feedback" element={<MentorFeedback/>} />
           <Route path="mentor-profile-settings" element={<MentorProfileSettings />} />
         </Route>
