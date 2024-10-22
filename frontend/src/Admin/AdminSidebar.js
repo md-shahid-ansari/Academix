@@ -12,7 +12,6 @@ const AdminSidebar = () => {
                     <li><Link to="manage-challenges">Manage Challenges</Link></li>
                     <li><Link to="manage-projects">Manage Projects</Link></li>
                     <li><Link to="reports-analytics">Reports and Analytics</Link></li>
-                    <li><Link to="leaderboard">Leaderboard</Link></li>
                 </ul>
             </nav>
             <div className="logout-btn"><button>Logout</button></div>
