@@ -16,23 +16,23 @@ const moduleSchema = new mongoose.Schema({
         type: String,
         required: true  // Overview of the module’s content and learning objectives
     },
-    contentURL: {
-        type: String,  // Link to learning materials (e.g., videos, articles)
+    mentor: {
+        type: mongoose.Schema.Types.ObjectId,  // Reference to the mentor (User)
+        ref: 'Mentor',
         required: true
     },
     skillsEarned: {
         type: [String],  // List of skills students will gain after completing the module
         default: []
     },
-    status: {
-        type: String,
-        enum: ['not started', 'in progress', 'completed'],
-        default: 'not started'  // Completion status
-    },
-    assessment: {
-        type: String,  // Quizzes or exams associated with the module
-        default: null
-    },
+    topics: [{
+        type: mongoose.Schema.Types.ObjectId,  // Reference to Topic model
+        ref: 'Topic'
+    }],
+    quizzes: [{
+        type: mongoose.Schema.Types.ObjectId,  // Reference to Quiz model
+        ref: 'Quiz'
+    }],
     dateCreated: {
         type: Date,
         default: Date.now

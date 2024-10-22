@@ -16,24 +16,19 @@ const learningPathSchema = new mongoose.Schema({
         type: String,
         required: true  // Overview of the learning path
     },
-    modules: {
-        type: [String],  // List of associated learning module IDs
-        default: []
-    },
-    progress: {
-        type: Number,
-        default: 0,  // Percentage progress in the learning path
-        min: 0,
-        max: 100
-    },
-    assignedTo: {
-        type: Number,  // Student ID to whom this path is assigned
+    mentor: [{
+        type: mongoose.Schema.Types.ObjectId,  // Reference to the mentor who created this path
+        ref: 'Mentor',
         required: true
-    },
-    recommendedCertifications: {
-        type: [String],  // List of certifications the student can earn through the path
-        default: []
-    },
+    }],
+    courses: [{
+        type: mongoose.Schema.Types.ObjectId,  // References to Course model
+        ref: 'Course'
+    }],
+    certifications: [{
+        type: mongoose.Schema.Types.ObjectId,  // References to Certification model
+        ref: 'Certification'
+    }],
     dateCreated: {
         type: Date,
         default: Date.now
