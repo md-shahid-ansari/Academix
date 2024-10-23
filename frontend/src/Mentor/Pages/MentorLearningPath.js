@@ -1,168 +1,119 @@
 import React, { useState } from 'react';
-import ModuleForm from '../components/ModuleForm'; // Import ModuleForm
-import './MentorLearningPath.css';
+import CourseForm from '../components/CourseForm'; // Course component to handle the course-level actions
 
 const MentorLearningPath = () => {
-    const [learningPath, setLearningPath] = useState({
-        title: '',
-        description: '',
-        courses: []
-    });
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [certificates, setCertificates] = useState(['']);
+    const [courses, setCourses] = useState([]);
 
-    const [courses, setCourses] = useState([
-        { title: '', description: '', modules: [] } // Ensure modules is initialized as an empty array
-    ]);
-
-    // Handle learning path data changes
-    const handleLearningPathChange = (field, value) => {
-        setLearningPath({
-            ...learningPath,
-            [field]: value
-        });
-    };
-
-    // Handle course data changes
-    const handleCourseChange = (index, updatedCourse) => {
-        const updatedCourses = courses.map((course, i) =>
-            i === index ? updatedCourse : course
-        );
-        setCourses(updatedCourses);
-    };
-
-    // Handle module data changes
-    const handleModuleChange = (courseIndex, moduleIndex, updatedModule) => {
-        const updatedCourses = courses.map((course, i) => {
-            if (i === courseIndex) {
-                const updatedModules = course.modules.map((module, mIndex) =>
-                    mIndex === moduleIndex ? updatedModule : module
-                );
-                return { ...course, modules: updatedModules };
-            }
-            return course;
-        });
-        setCourses(updatedCourses);
-    };
-
-    // Add a new course
     const handleAddCourse = () => {
-        setCourses([...courses, { title: '', description: '', modules: [] }]); // Initialize modules as an empty array
+        setCourses([...courses, { title: '', modules: [] }]);
     };
 
-    // Remove a course
-    const handleRemoveCourse = (courseIndex) => {
-        const updatedCourses = courses.filter((_, i) => i !== courseIndex);
+    const handleCourseChange = (index, updatedCourse) => {
+        const updatedCourses = courses.map((course, i) => i === index ? updatedCourse : course);
         setCourses(updatedCourses);
     };
 
-    // Add a new module to a course
-    const handleAddModule = (courseIndex) => {
-        const updatedCourses = courses.map((course, i) =>
-            i === courseIndex
-                ? { ...course, modules: [...course.modules, { title: '', description: '', topics: [], quizzes: [] }] }
-                : course
-        );
+    const handleRemoveCourse = (index) => {
+        const updatedCourses = courses.filter((_, i) => i !== index);
         setCourses(updatedCourses);
     };
 
-    // Remove a module
-    const handleRemoveModule = (courseIndex, moduleIndex) => {
-        const updatedCourses = courses.map((course, i) => {
-            if (i === courseIndex) {
-                const updatedModules = course.modules.filter((_, mIndex) => mIndex !== moduleIndex);
-                return { ...course, modules: updatedModules };
-            }
-            return course;
-        });
-        setCourses(updatedCourses);
+    const handleAddCertificate = () => {
+        setCertificates([...certificates, '']);
     };
 
-    // Submit handler
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = {
-            learningPath,
+    const handleCertificateChange = (index, value) => {
+        const updatedCertificates = certificates.map((cert, i) => i === index ? value : cert);
+        setCertificates(updatedCertificates);
+    };
+
+    const handleRemoveCertificate = (index) => {
+        const updatedCertificates = certificates.filter((_, i) => i !== index);
+        setCertificates(updatedCertificates);
+    };
+
+    const handleSubmit = () => {
+        if (!title || !description || courses.length === 0) {
+            alert("Please provide a title, description, and at least one course.");
+            return;
+        }
+
+        const learningPathData = {
+            title,
+            description,
+            certificates,
             courses
         };
-        console.log('Submitted Learning Path Data:', formData);
-        // You would replace this with the actual API call to create the learning path
+
+        console.log("Learning Path submitted:", learningPathData);
+        alert("Learning Path submitted successfully!");
+        // You can also make a POST request to a server here with the learningPathData.
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            {/* Learning Path Details */}
+        <div>
+            <h2>Create Mentor Learning Path</h2>
+            
+            {/* Learning Path Title */}
             <div>
-                <h3>Create Learning Path</h3>
-                <input
-                    type="text"
-                    value={learningPath.title}
-                    onChange={(e) => handleLearningPathChange('title', e.target.value)}
-                    placeholder="Learning Path Title"
-                    required
-                />
-                <textarea
-                    value={learningPath.description}
-                    onChange={(e) => handleLearningPathChange('description', e.target.value)}
-                    placeholder="Learning Path Description"
-                    required
+                <label>Title:</label>
+                <input 
+                    type="text" 
+                    value={title} 
+                    onChange={(e) => setTitle(e.target.value)} 
+                    placeholder="Enter Learning Path Title"
                 />
             </div>
 
-            {/* Courses Section */}
-            {courses.map((course, courseIndex) => (
-                <div key={courseIndex}>
-                    <h4>Course {courseIndex + 1}</h4>
-                    <input
-                        type="text"
-                        value={course.title}
-                        onChange={(e) =>
-                            handleCourseChange(courseIndex, {
-                                ...course,
-                                title: e.target.value
-                            })
-                        }
-                        placeholder="Course Title"
-                        required
-                    />
-                    <textarea
-                        value={course.description}
-                        onChange={(e) =>
-                            handleCourseChange(courseIndex, {
-                                ...course,
-                                description: e.target.value
-                            })
-                        }
-                        placeholder="Course Description"
-                        required
-                    />
+            {/* Learning Path Description */}
+            <div>
+                <label>Description:</label>
+                <textarea 
+                    value={description} 
+                    onChange={(e) => setDescription(e.target.value)} 
+                    placeholder="Enter Learning Path Description"
+                />
+            </div>
 
-                    {/* Modules Section */}
-                    {course.modules.map((module, moduleIndex) => (
-                        <div key={moduleIndex}>
-                            <ModuleForm
-                                index={moduleIndex}
-                                module={module}
-                                onModuleChange={(updatedModule) =>
-                                    handleModuleChange(courseIndex, moduleIndex, updatedModule)
-                                }
-                            />
-                            <button type="button" onClick={() => handleRemoveModule(courseIndex, moduleIndex)}>
-                                Remove Module
-                            </button>
-                        </div>
-                    ))}
-                    <button type="button" onClick={() => handleAddModule(courseIndex)}>
-                        Add Module
-                    </button>
-                    <button type="button" onClick={() => handleRemoveCourse(courseIndex)}>
-                        Remove Course
-                    </button>
-                </div>
-            ))}
-            <button type="button" onClick={handleAddCourse}>
-                Add Course
-            </button>
-            <button type="submit">Create Learning Path</button>
-        </form>
+            {/* Certificates */}
+            <div>
+                <label>Certificates:</label>
+                {certificates.map((cert, index) => (
+                    <div key={index}>
+                        <input 
+                            type="text" 
+                            value={cert} 
+                            onChange={(e) => handleCertificateChange(index, e.target.value)} 
+                            placeholder="Enter Certificate Name"
+                        />
+                        <button onClick={() => handleRemoveCertificate(index)}>Remove</button>
+                    </div>
+                ))}
+                <button onClick={handleAddCertificate}>Add Certificate</button>
+            </div>
+
+            {/* Courses */}
+            <div>
+                <h3>Courses</h3>
+                {courses.map((course, index) => (
+                    <div key={index}>
+                        <CourseForm 
+                            index={index} 
+                            course={course} 
+                            onCourseChange={handleCourseChange} 
+                        />
+                        <button onClick={() => handleRemoveCourse(index)}>Remove Course</button>
+                    </div>
+                ))}
+                <button onClick={handleAddCourse}>Add Course</button>
+            </div>
+
+            {/* Submit Learning Path */}
+            <button onClick={handleSubmit} style={{ marginTop: '20px' }}>Submit Learning Path</button>
+        </div>
     );
 };
 
