@@ -12,10 +12,7 @@ const Header = () => {
                 <i className="fas fa-search search-icon"></i>
                 <input type="text" className="search-input" placeholder="Search..." />
                 </li>
-                <li><Link to="/student-home">Student</Link></li>
-                <li><Link to="/mentor-home">Mentor</Link></li>
-                <li><Link to="/admin-home">Company</Link></li>
-                <li><Link to="/login-page">Sign In</Link></li>
+                <li><Link to="/login-page">Login/Register</Link></li>
             </ul>
         </nav>
     </header>
