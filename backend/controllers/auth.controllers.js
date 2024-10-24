@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { generateVerificationToken } from '../utils/generateVerificationToken.js';
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie.js';
-import { sendVerificationEmail, sendWelcomeEmail , sendPasswordResetEmail, sendResetSuccessEmail } from '../mailtrap/emails.js';
+import { sendVerificationEmail, sendWelcomeEmail , sendPasswordResetEmail, sendResetSuccessEmail } from '../nodemailer/emails.js';
 
 
 //student
